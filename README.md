@@ -124,29 +124,18 @@ Biprompter, Windows üzerinde küresel (global) sistem kısayollarını destekle
 Biprompter, modern web teknolojilerinin esnekliği ile yerel masaüstü sistemlerinin (Rust/C++) hız ve gücünü bir araya getiren hibrit ve modüler bir mimari üzerine inşa edilmiştir:
 
 ```mermaid
-flowchart TD
-    subgraph Native["🦀 Masaüstü Katmanı (Rust & Tauri v2)"]
-        Win32["Win32 Native API (user32, dwmapi)"]
-        Shortcuts["Global Klavye Kısayolları (Alt+D, Alt+G, Alt+C)"]
-        Ghost["OBS / Yayın Gizleme (SetWindowDisplayAffinity)"]
-        Dock["Dynamic Island Pencere Boyutlandırma & Çentik"]
-    end
+graph TD
+    A["🦀 Masaüstü & Sistem Katmanı (Tauri v2 + Rust)<br/>• Win32 API (user32, dwmapi)<br/>• OBS & Yayın Gizleme (SetWindowDisplayAffinity)<br/>• Global Klavye Kısayolları (Alt+D, Alt+G, Alt+C)"]
+    
+    B["⚡ Paketleyici & Statik Kabuk (Astro 5 + Vite)<br/>• index.astro Statik Host<br/>• Tailwind CSS v4 Derleyicisi<br/>• Sıfır Gecikmeli HMR & Küçük Bundle"]
+    
+    C["⚛️ Arayüz & Uygulama Mantığı (React 19 + TypeScript)<br/>• IslandPrompter (Dynamic Island & Zıplayan Ok)<br/>• EditorView (Stüdyo Editör & Ayar Paneli)<br/>• useSpeechTracker & Fizik Tabanlı Kaydırma"]
+    
+    D["🧠 Yapay Zekâ & Konuşma Motoru (Vosk Wasm)<br/>• %100 Çevrimdışı WebAssembly ASR<br/>• 12 Dil Desteği & Sıfır Bulut Bağımlılığı"]
 
-    subgraph Bundler["⚡ Paketleyici & Kabuk (Astro 5 + Vite)"]
-        AstroShell["index.astro (Statik Host Kabuğu)"]
-        ViteBuild["Vite Rollup Modül Paketleyici"]
-        TailwindEngine["Tailwind CSS v4 Derleyicisi"]
-    end
-
-    subgraph Frontend["⚛️ Arayüz & Uygulama Mantığı (React 19 & TypeScript)"]
-        IslandPrompter["IslandPrompter (Dynamic Island & Zıplayan Ok)"]
-        EditorView["EditorView (Stüdyo Editör & Ayar Paneli)"]
-        Vosk["Vosk Speech AI (WebAssembly Çevrimdışı Tanıma)"]
-        Tracker["useSpeechTracker & Kelime Eşleştirme Motoru"]
-    end
-
-    Native <-->|Tauri IPC (Invoke / Event)| Frontend
-    Bundler -->|Statik Çıktı /dist| Native
+    B -->|"Statik Derleme (/dist)"| A
+    C <-->|"Tauri IPC (Invoke & Event)"| A
+    D -->|"Canlı Kelime Akışı"| C
 ```
 
 ### 🦀 1. Masaüstü & Sistem Katmanı: Tauri v2 (Rust)
