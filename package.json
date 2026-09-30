@@ -1,0 +1,40 @@
+{
+  "name": "biprompter",
+  "version": "1.0.0",
+  "description": "Biprompter - Modern Windows Teleprompter Application",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1 --port 4321",
+    "build": "astro build",
+    "preview": "astro preview",
+    "tauri": "tauri"
+  },
+  "keywords": [
+    "teleprompter",
+    "tauri",
+    "astro",
+    "react",
+    "windows"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@astrojs/react": "^6.0.5",
+    "@tailwindcss/vite": "^4.3.3",
+    "@tauri-apps/api": "^2.11.1",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "astro": "^7.2.10",
+    "lucide-react": "^1.39.0",
+    "qrcode": "^1.5.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vosk-browser": "^0.0.8"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.4"
+  }
+}
