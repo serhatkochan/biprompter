@@ -67,6 +67,7 @@ export interface PrompterSettings {
   clickThrough?: boolean;     // Pass clicks through window to underlying apps
   trackingTargetWpm: number;  // Target speaking tempo for tracking mode (e.g. 110, 130, 155, 180)
   autoStart?: boolean;        // Automatically start speech tracking/scrolling upon opening prompter (default true)
+  showWelcomeOnStartup?: boolean; // Show opening/welcome screen on application launch (default true)
 }
 
 export interface ScriptSection {
@@ -160,6 +161,7 @@ export const DEFAULT_SETTINGS: PrompterSettings = {
   clickThrough: false,
   trackingTargetWpm: 130,
   autoStart: true,
+  showWelcomeOnStartup: true,
 };
 
 export const DEMO_SCRIPT: ScriptData = {

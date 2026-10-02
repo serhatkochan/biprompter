@@ -4,6 +4,7 @@ import { Header } from './Header';
 import { EditorView } from './EditorView';
 import { PrompterView } from './PrompterView';
 import { CountdownOverlay } from './CountdownOverlay';
+import { WelcomeScreen } from './WelcomeScreen';
 import { DEMO_SCRIPT, DEFAULT_SETTINGS } from '../types/prompter';
 import type { ScriptData, ScriptSection, PrompterSettings } from '../types/prompter';
 import { loadAllScripts, getActiveScriptId, ensureScriptSections } from '../utils/scriptStorage';
@@ -75,6 +76,25 @@ const BiprompterAppContent: React.FC = () => {
   });
   const [isCountingDown, setIsCountingDown] = useState<boolean>(false);
   const [lastElapsedSeconds, setLastElapsedSeconds] = useState<number>(0);
+
+  // Welcome Screen & Startup Experience
+  const [showWelcome, setShowWelcome] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('mode') === 'prompter') return false;
+      try {
+        const savedSettings = localStorage.getItem('biprompter_settings');
+        if (savedSettings) {
+          const parsed = JSON.parse(savedSettings);
+          if (parsed.showWelcomeOnStartup === false) return false;
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+    return true;
+  });
+  const [isInitialLaunch, setIsInitialLaunch] = useState<boolean>(true);
 
   // Single Source of Truth for Multi-Script Storage
   const [scripts, setScripts] = useLocalStorage<ScriptData[]>(
@@ -510,6 +530,7 @@ const BiprompterAppContent: React.FC = () => {
             isSidebarOpen={isSidebarOpen}
             scriptTitle={activeScript.title || 'İsimsiz Konuşma'}
             sectionTitle={activeSection?.title || 'Metin Başlığı...'}
+            onOpenWelcome={() => setShowWelcome(true)}
           />
 
           <main className="flex-1 overflow-hidden">
@@ -559,6 +580,27 @@ const BiprompterAppContent: React.FC = () => {
           onComplete={handleCountdownComplete}
           onCancel={handleCountdownCancel}
           appLanguage={settings.appLanguage}
+        />
+      )}
+
+      {/* Welcome & Startup Opening Screen */}
+      {showWelcome && mode === 'editor' && (
+        <WelcomeScreen
+          isOpen={showWelcome}
+          onClose={() => {
+            setShowWelcome(false);
+            setIsInitialLaunch(false);
+          }}
+          activeScript={activeScript}
+          scripts={scripts}
+          onSelectScript={handleSelectScript}
+          onCreateNewScript={handleCreateNewScript}
+          onImportScript={handleImportScript}
+          onLaunchPrompter={handleLaunchPrompter}
+          settings={settings}
+          onUpdateSettings={setSettings}
+          appLanguage={settings.appLanguage}
+          isInitialLaunch={isInitialLaunch}
         />
       )}
     </div>

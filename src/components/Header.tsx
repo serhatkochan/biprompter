@@ -15,6 +15,7 @@ interface HeaderProps {
   scriptTitle?: string;
   sectionTitle?: string;
   activeScriptTitle?: string;
+  onOpenWelcome?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -28,6 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
   scriptTitle,
   sectionTitle,
   activeScriptTitle,
+  onOpenWelcome,
 }) => {
   const t = getTranslations(appLanguage || 'tr');
 
@@ -49,6 +51,16 @@ export const Header: React.FC<HeaderProps> = ({
     >
       {/* Sidebar Toggle & Clean Breadcrumb: Konuşma Başlığı / Metin Başlığı */}
       <div className="flex items-center gap-2.5 min-w-0">
+        {onOpenWelcome && (
+          <button
+            onClick={onOpenWelcome}
+            className="w-6 h-6 bg-white hover:bg-neutral-200 text-black font-extrabold text-[11px] rounded flex items-center justify-center transition-all duration-150 active:scale-95 cursor-pointer shrink-0 shadow-xs"
+            title="Biprompter Açılış Ekranı ve Hızlı Başlatıcı"
+          >
+            Bi
+          </button>
+        )}
+
         {mode === 'editor' && onToggleSidebar && (
           <button
             onClick={onToggleSidebar}
